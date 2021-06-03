@@ -116,3 +116,4 @@ func main() {
 }
 
 // have a config file where they can input all the necessary information for what they want in the output. or try and use structs that then when they flag it pulls out certain values
+// when parsing the file try and do it all with bytes for efficiency and all

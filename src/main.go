@@ -53,14 +53,19 @@ func correctedPoints(dayFactor float64, points float64) float64 {
 	return dayFactor * points
 }
 
-// A function to find the distance between two points on the WGS-84 ellipsoid, note that the input is in radians and output is in metres.
+// A function to find the distance between two points on the WGS-84 ellipsoid, note input is in decimal degrees and output is in metres.
 func vincentyDistance(lat1 float64, lon1 float64, lat2 float64, lon2 float64) (distance float64) {
+
+	lat1 = deg2rad(lat1)
+	lat2 = deg2rad(lat2)
+	lon1 = deg2rad(lon1)
+	lon2 = deg2rad(lon2)
 
 	a := 6378137.0
 	f := 1 / 298.257223563
 	b := (1 - f) * a
 
-	tolerance := 1e-11
+	tolerance := 1e-12
 
 	phi1, phi2 := lat1, lat2
 	U1 := math.Atan((1 - f) * math.Tan(phi1))
@@ -107,7 +112,7 @@ func vincentyDistance(lat1 float64, lon1 float64, lat2 float64, lon2 float64) (d
 
 func main() {
 
-	fmt.Println(vincentyDistance(100, 100, 50, 50))
+	fmt.Println(vincentyDistance(-45, 150, 50, 170))
 }
 
 // have a config file where they can input all the necessary information for what they want in the output. or try and use structs that then when they flag it pulls out certain values

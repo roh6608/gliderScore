@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"math"
 )
 
@@ -112,8 +111,13 @@ func vincentyDistance(lat1 float64, lon1 float64, lat2 float64, lon2 float64) (d
 
 func main() {
 
-	fmt.Println(vincentyDistance(-45, 150, 50, 170))
 }
 
 // have a config file where they can input all the necessary information for what they want in the output. or try and use structs that then when they flag it pulls out certain values
 // when parsing the file try and do it all with bytes for efficiency and all
+// need to write a really good readme and also good documentation for it, really need to sell it
+// want this to be a genuinly good repo for the gfa, also make sure to put a good licence on it
+// also have really good and meaning full comment in the code, linking to the sources of information etc
+// once i have a version ready, create a producton and development branch
+// will output scores however specified in documentation or whatever I find the best, probably have txt table, tab delimited?
+// make sure to document it so people can use it

@@ -22,7 +22,9 @@ func TestDeg2Rad(t *testing.T) {
 	for _, testTable := range testData {
 		testGot := deg2rad(testTable.x)
 
-		if testGot != testTable.y {
+		tolerance := 1e-10
+
+		if testGot < testTable.y-tolerance || testGot > testTable.y+tolerance {
 			t.Errorf("deg2rad was incorrect, expected: %f, got: %f", testTable.y, testGot)
 		}
 	}

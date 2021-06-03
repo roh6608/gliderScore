@@ -1,6 +1,9 @@
 package main
 
-import "math"
+import (
+	"fmt"
+	"math"
+)
 
 func maxDaily(d0 float64, dD float64, t0 float64, tT float64) float64 {
 
@@ -50,7 +53,7 @@ func correctedPoints(dayFactor float64, points float64) float64 {
 	return dayFactor * points
 }
 
-// A function to find the distance between two points on the WGS-84 ellipsoid, note that the input is in radians.
+// A function to find the distance between two points on the WGS-84 ellipsoid, note that the input is in radians and output is in metres.
 func vincentyDistance(lat1 float64, lon1 float64, lat2 float64, lon2 float64) (distance float64) {
 
 	a := 6378137.0
@@ -69,14 +72,40 @@ func vincentyDistance(lat1 float64, lon1 float64, lat2 float64, lon2 float64) (d
 
 	for {
 		t := math.Pow(math.Cos(U2)*math.Sin(lambdaOld), 2)
-		t += math.Pow((math.Cos(U1)*math.Sin(U2) - math.Sin(U1)), 2)
+		t += math.Pow((math.Cos(U1)*math.Sin(U2) - math.Sin(U1)*math.Cos(U2)*math.Cos(lambdaOld)), 2)
+		sinSigma := math.Pow(t, 0.5)
+		cosSigma := math.Sin(U1)*math.Sin(U2) + math.Cos(U1)*math.Cos(U2)*math.Cos(lambdaOld)
+		sigma := math.Atan2(sinSigma, cosSigma)
+
+		sinAlpha := math.Cos(U1) * math.Cos(U2) * math.Sin(lambdaOld) / sinSigma
+		cosSqAlpha := 1 - math.Pow(sinAlpha, 2)
+		cos2SigmaM := cosSigma - 2*math.Sin(U1)*math.Sin(U2)/cosSqAlpha
+		c := f * cosSqAlpha * (4 + f*(4-3*cosSqAlpha)) / 16
+
+		t = sigma + c*sinSigma*(cos2SigmaM+c*cosSigma*(-1+2*math.Pow(cos2SigmaM, 2)))
+		lambdaNew := L + (1-c)*f*sinAlpha*t
+
+		if math.Abs(lambdaNew-lambdaOld) <= tolerance {
+			break
+		} else {
+			lambdaOld = lambdaNew
+		}
+
+		u2 := cosSqAlpha * ((math.Pow(a, 2) - math.Pow(b, 2)) / math.Pow(b, 2))
+		A := 1 + (u2/16384)*(4096+u2*(-768+u2*(320-175*u2)))
+		B := (u2 / 1024) * (256 + u2*(-128+u2*(74-47*u2)))
+		t = cos2SigmaM + 0.25*B*(cosSigma*(-1+2*math.Pow(cos2SigmaM, 2)))
+		t -= (B / 6) * cos2SigmaM * (-3 + 4*math.Pow(sinSigma, 2)) * (-3 + 4*math.Pow(cos2SigmaM, 2))
+		deltaSigma := B * sinSigma * t
+		distance = b * A * (sigma - deltaSigma)
 	}
 
-	return s
+	return distance
 }
 
 func main() {
 
+	fmt.Println(vincentyDistance(100, 100, 50, 50))
 }
 
-// have a config file where they can input all the necessary information
+// have a config file where they can input all the necessary information for what they want in the output.

@@ -103,9 +103,11 @@ func vincentyDistance(lat1 float64, lon1 float64, lat2 float64, lon2 float64) (d
 	return distance
 }
 
+// write a test and benchmark for vincenty, also write benchmarks in for the rest of the tests, because it doesnt look to hard
+
 func main() {
 
 	fmt.Println(vincentyDistance(100, 100, 50, 50))
 }
 
-// have a config file where they can input all the necessary information for what they want in the output.
+// have a config file where they can input all the necessary information for what they want in the output. or try and use structs that then when they flag it pulls out certain values

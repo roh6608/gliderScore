@@ -22,3 +22,13 @@ func TestMinValue(t *testing.T) {
 		}
 	}
 }
+
+func BenchmarkMinValue(b *testing.B) {
+
+	i := 0
+
+	for i < b.N {
+		minValue(1, 2, 3)
+		i += 1
+	}
+}

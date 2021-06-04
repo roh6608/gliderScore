@@ -47,12 +47,17 @@ func dayFactor(nD float64, N float64) (dayFactor float64) {
 
 }
 
+// Give the function descriptive comments and also what gfa rule it refers to
 func correctedPoints(dayFactor float64, points float64) float64 {
 
 	return dayFactor * points
 }
 
-// A function to find the distance between two points on the WGS-84 ellipsoid, note input is in decimal degrees and output is in metres.
+/* A function to find the distance between two points on the WGS-84 ellipsoid using the Vincenty algorithm, note input is in decimal degrees and output is in metres.
+
+   Equations from https://en.wikipedia.org/wiki/Vincenty%27s_formulae, implementation a derivative of implementation found at
+   https://www.johndcook.com/blog/2018/11/24/spheroid-distance/ as per https://www.fai.org/page/world-distance-calculator.
+*/
 func vincentyDistance(lat1 float64, lon1 float64, lat2 float64, lon2 float64) (distance float64) {
 
 	lat1 = deg2rad(lat1)

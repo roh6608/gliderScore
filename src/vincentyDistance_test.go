@@ -33,4 +33,4 @@ func BenchmarkVincenyMethod(b *testing.B) {
 	}
 }
 
-// To run benchmark put -bench=. tag after go test
+// To run benchmark put go test -bench=.

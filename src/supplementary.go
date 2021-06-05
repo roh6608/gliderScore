@@ -43,7 +43,7 @@ func pointInCrossingNumber(lat float64, lon float64, vertices [][]float64, n int
 			vt := (lat - vertices[i][1]) / (vertices[i+1][1] - vertices[i][1])
 
 			if vertices[i][0] < vertices[i][0]+vt*(vertices[i+1][0]-vertices[i][0]) {
-				cn += cn
+				cn += 1
 			}
 		}
 
@@ -61,3 +61,6 @@ func pointInCrossingNumber(lat float64, lon float64, vertices [][]float64, n int
 // write ut both types and then can use tests and benchmarks to see which one operates quicker
 // likewise for finding if the point lies within a circle
 // when writing it also only compare d^2 with r^2 because it is more efficient
+// turn point will use vincenty method and just test that a point falls within the distance, also return a message in a log
+// file if points are very close to the boundary
+// for turn point radius filter out the points that are not relevant to the turn point so it only has to test a small amount of points

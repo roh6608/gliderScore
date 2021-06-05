@@ -132,3 +132,6 @@ func main() {
 // once i have a version ready, create a producton and development branch
 // will output scores however specified in documentation or whatever I find the best, probably have txt table, tab delimited?
 // make sure to document it so people can use it
+
+// Need to also have checks that the fligh follows the set out task, also a way to read in that set out task
+// also implement all the penalities etc, what a fully functions application

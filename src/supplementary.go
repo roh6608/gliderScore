@@ -197,7 +197,14 @@ type bRecord struct {
 // will have to add more to these structs so they can take the possible extra statements as defined in the I records
 
 func parseB(file []string) bRecord {
-
+	// implement a check on the I records to see if any additionals have to be parsed also add these to the structs
+	// can do this implementation without the two different structs, implement it this way
+	// write an I record parser, that can parse the I record and then with that then know how to parse the B record
+	// so Should write the I record parser first
+	// write out an I record struct that has all the possibilities that it can have and then it records the bytes
+	// in which it is located, this can then be used in the B record parser, then use if statements to check what is in the
+	// I record parser
+	// in b record parser change the use of append to just simple assignment since it is about 2 ns/op quicker
 	var b bRecordString
 
 	for i := 0; i < len(file); i++ {

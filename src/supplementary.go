@@ -30,14 +30,14 @@ func deg2rad(deg float64) float64 {
 // There is no warranty for this code, and the author of it cannot
 // be held liable for any real or imagined damage from its use.
 // Users of this code must verify correctness for their application.
-func pointInCrossingNumber(lat float64, lon float64, vertices [][]float64, n int) int {
+func pointInCrossingNumber(lat float64, lon float64, vertices [][]float64) int {
 
 	cn := 0
 
 	i := 0
 
 	// array indexing may be backwards here
-	for i < n {
+	for i < len(vertices)-1 {
 		if ((vertices[i][1] <= lat) && (vertices[i+1][1] > lat)) || ((vertices[i][1] > lat) && vertices[i+1][1] <= lat) {
 
 			vt := (lat - vertices[i][1]) / (vertices[i+1][1] - vertices[i][1])

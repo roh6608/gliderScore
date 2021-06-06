@@ -22,3 +22,13 @@ func TestPointInCicrle(t *testing.T) {
 		}
 	}
 }
+
+func BenchmarkPointInCircle(b *testing.B) {
+
+	i := 0
+	for i < b.N {
+		pointInCircle(-29.5, 150.5, [][]float64{{-30, 250}}, 100000)
+		i += 1
+
+	}
+}

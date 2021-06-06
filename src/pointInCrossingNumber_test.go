@@ -10,8 +10,8 @@ func TestPointInCrossingNumber(t *testing.T) {
 		vertices [][]float64
 		output   int
 	}{
-		{2.5, 2.5, [][]float64{{0, 0}, {5, 0}, {5, 5}, {0, 5}, {0, 0}}, 1},
-		{10, 10, [][]float64{{0, 0}, {5, 0}, {5, 5}, {0, 5}, {0, 0}}, 0},
+		{2.5, 2.5, [][]float64{{5, 0}, {5, 5}, {0, 5}, {0, 0}}, 1},
+		{10, 10, [][]float64{{5, 0}, {5, 5}, {0, 5}, {0, 0}}, 0},
 	}
 
 	for _, testTable := range testData {

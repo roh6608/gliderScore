@@ -54,6 +54,17 @@ func pointInCrossingNumber(lat float64, lon float64, vertices [][]float64) int {
 
 }
 
+func pointInCircle(lat float64, lon float64, centre [][]float64, radius float64) bool {
+
+	distance := vincentyDistance(lat, lon, centre[0][0], centre[0][1])
+
+	if distance <= radius {
+		return true
+	} else {
+		return false
+	}
+}
+
 // re-write the above function using pointers and structs as in their example
 
 // write function for if it is inside a circle using the math stack exchange example, also check if there is more efficient

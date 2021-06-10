@@ -1,3 +1,3 @@
 # gliderScore
  
-A repository for scoring gliding competions. Support only for GFA rules currently.
+This repository is currently under development and is not suitable for use at this stage.

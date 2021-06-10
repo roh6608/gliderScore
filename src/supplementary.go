@@ -89,7 +89,7 @@ func pointInWindingNumber(P point, V vertices, n int) bool {
 
 }
 
-// A function to find if a point lies within a point on the WGS-84 spheroid
+// A function to find if a point lies within a circle on the WGS-84 spheroid
 func pointInCircle(lat float64, lon float64, centre [][]float64, radius float64) bool {
 
 	distance := vincentyDistance(lat, lon, centre[0][0], centre[0][1])
@@ -194,8 +194,7 @@ type bRecord struct {
 	gnssAltitude     []int
 }
 
-// will have to add more to these structs so they can take the possible extra statements as defined in the I records
-
+// make the b recod parser only use the one struct, should be possible
 func parseB(file []string) bRecord {
 	// implement a check on the I records to see if any additionals have to be parsed also add these to the structs
 	// can do this implementation without the two different structs, implement it this way

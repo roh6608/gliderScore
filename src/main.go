@@ -60,6 +60,3 @@ func correctedPoints(dayFactor float64, points float64) float64 {
 func main() {
 
 }
-
-// need to write a visualisation as well, doesnt have to be amazing but they currently use SeeYou, something similar enough
-// will do

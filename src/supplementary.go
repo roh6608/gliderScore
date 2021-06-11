@@ -194,7 +194,6 @@ func parseB(file []string) bRecord {
 	// write out an I record struct that has all the possibilities that it can have and then it records the bytes
 	// in which it is located, this can then be used in the B record parser, then use if statements to check what is in the
 	// I record parser
-	// in b record parser change the use of append to just simple assignment since it is about 2 ns/op quicker
 
 	var record bRecord
 	for i := 0; i < len(file); i++ {

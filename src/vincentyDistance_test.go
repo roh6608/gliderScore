@@ -27,7 +27,7 @@ func BenchmarkVincenyMethod(b *testing.B) {
 
 	i := 0
 	for i < b.N {
-		vincentyDistance(-30, 150, -29.5, 150.5)
+		vincentyDistance(-30, 150, -30.01, 150.01)
 		i += 1
 
 	}

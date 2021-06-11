@@ -1,5 +1,9 @@
 package main
 
+import (
+	"fmt"
+)
+
 // Function to return the maximum daily points available, as per rule 44.2
 func maxDaily(d0 float64, dD float64, t0 float64, tT float64) float64 {
 
@@ -57,4 +61,8 @@ func correctedPoints(dayFactor float64, points float64) float64 {
 
 func main() {
 
+	file := readFile("../example/files/crash.igc")
+	brec := parseB(file)
+
+	fmt.Println(totalFlightDistance(brec.latitude, brec.longitude))
 }

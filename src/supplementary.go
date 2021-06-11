@@ -108,53 +108,67 @@ func pointInCircle(lat float64, lon float64, centre [][]float64, radius float64)
 */
 func vincentyDistance(lat1 float64, lon1 float64, lat2 float64, lon2 float64) (distance float64) {
 
-	lat1 = deg2rad(lat1)
-	lat2 = deg2rad(lat2)
-	lon1 = deg2rad(lon1)
-	lon2 = deg2rad(lon2)
+	if lat1 == lat2 && lon1 == lon2 {
+		return 0
+	} else {
 
-	a := 6378137.0
-	f := 1 / 298.257223563
-	b := (1 - f) * a
+		lat1 = deg2rad(lat1)
+		lat2 = deg2rad(lat2)
+		lon1 = deg2rad(lon1)
+		lon2 = deg2rad(lon2)
 
-	tolerance := 1e-12
+		a := 6378137.0
+		f := 1 / 298.257223563
+		b := (1 - f) * a
 
-	phi1, phi2 := lat1, lat2
-	U1 := math.Atan((1 - f) * math.Tan(phi1))
-	U2 := math.Atan((1 - f) * math.Tan(phi2))
-	L1, L2 := lat1, lat2
-	L := L2 - L1
+		tolerance := 1e-12
 
-	lambdaOld := L + 0
+		phi1, phi2 := lat1, lat2
+		U1 := math.Atan((1 - f) * math.Tan(phi1))
+		U2 := math.Atan((1 - f) * math.Tan(phi2))
+		L1, L2 := lon1, lon2
+		L := L2 - L1
 
-	for {
-		t := math.Pow(math.Cos(U2)*math.Sin(lambdaOld), 2)
-		t += math.Pow((math.Cos(U1)*math.Sin(U2) - math.Sin(U1)*math.Cos(U2)*math.Cos(lambdaOld)), 2)
-		sinSigma := math.Pow(t, 0.5)
-		cosSigma := math.Sin(U1)*math.Sin(U2) + math.Cos(U1)*math.Cos(U2)*math.Cos(lambdaOld)
-		sigma := math.Atan2(sinSigma, cosSigma)
+		lambdaOld := L + 0
 
-		sinAlpha := math.Cos(U1) * math.Cos(U2) * math.Sin(lambdaOld) / sinSigma
-		cosSqAlpha := 1 - math.Pow(sinAlpha, 2)
-		cos2SigmaM := cosSigma - 2*math.Sin(U1)*math.Sin(U2)/cosSqAlpha
-		c := f * cosSqAlpha * (4 + f*(4-3*cosSqAlpha)) / 16
+		for {
+			t := math.Pow(math.Cos(U2)*math.Sin(lambdaOld), 2)
+			t += math.Pow((math.Cos(U1)*math.Sin(U2) - math.Sin(U1)*math.Cos(U2)*math.Cos(lambdaOld)), 2)
+			sinSigma := math.Pow(t, 0.5)
+			cosSigma := math.Sin(U1)*math.Sin(U2) + math.Cos(U1)*math.Cos(U2)*math.Cos(lambdaOld)
+			sigma := math.Atan2(sinSigma, cosSigma)
 
-		t = sigma + c*sinSigma*(cos2SigmaM+c*cosSigma*(-1+2*math.Pow(cos2SigmaM, 2)))
-		lambdaNew := L + (1-c)*f*sinAlpha*t
+			sinAlpha := math.Cos(U1) * math.Cos(U2) * math.Sin(lambdaOld) / sinSigma
+			cosSqAlpha := 1 - math.Pow(sinAlpha, 2)
+			cos2SigmaM := cosSigma - 2*math.Sin(U1)*math.Sin(U2)/cosSqAlpha
+			c := f * cosSqAlpha * (4 + f*(4-3*cosSqAlpha)) / 16
 
-		if math.Abs(lambdaNew-lambdaOld) <= tolerance {
-			break
-		} else {
-			lambdaOld = lambdaNew
+			t = sigma + c*sinSigma*(cos2SigmaM+c*cosSigma*(-1+2*math.Pow(cos2SigmaM, 2)))
+			lambdaNew := L + (1-c)*f*sinAlpha*t
+
+			if math.Abs(lambdaNew-lambdaOld) <= tolerance {
+				break
+			} else {
+				lambdaOld = lambdaNew
+			}
+
+			u2 := cosSqAlpha * ((math.Pow(a, 2) - math.Pow(b, 2)) / math.Pow(b, 2))
+			A := 1 + (u2/16384)*(4096+u2*(-768+u2*(320-175*u2)))
+			B := (u2 / 1024) * (256 + u2*(-128+u2*(74-47*u2)))
+			t = cos2SigmaM + 0.25*B*(cosSigma*(-1+2*math.Pow(cos2SigmaM, 2)))
+			t -= (B / 6) * cos2SigmaM * (-3 + 4*math.Pow(sinSigma, 2)) * (-3 + 4*math.Pow(cos2SigmaM, 2))
+			deltaSigma := B * sinSigma * t
+			distance = b * A * (sigma - deltaSigma)
 		}
 
-		u2 := cosSqAlpha * ((math.Pow(a, 2) - math.Pow(b, 2)) / math.Pow(b, 2))
-		A := 1 + (u2/16384)*(4096+u2*(-768+u2*(320-175*u2)))
-		B := (u2 / 1024) * (256 + u2*(-128+u2*(74-47*u2)))
-		t = cos2SigmaM + 0.25*B*(cosSigma*(-1+2*math.Pow(cos2SigmaM, 2)))
-		t -= (B / 6) * cos2SigmaM * (-3 + 4*math.Pow(sinSigma, 2)) * (-3 + 4*math.Pow(cos2SigmaM, 2))
-		deltaSigma := B * sinSigma * t
-		distance = b * A * (sigma - deltaSigma)
+		return distance
+	}
+}
+
+func totalFlightDistance(lat []float64, lon []float64) (distance float64) {
+
+	for i := 0; i < len(lat)-1; i++ {
+		distance += vincentyDistance(lat[i], lon[i], lat[i+1], lon[i+1])
 	}
 
 	return distance

@@ -199,36 +199,37 @@ func parseB(file []string) bRecord {
 	for i := 0; i < len(file); i++ {
 		if string(file[i][0]) == "B" {
 			time, _ := time.Parse("150405", file[i][1:7])
-			record.time[i] = time
+			record.time = append(record.time, time)
 
 			// checking if latitude is north or south, and parsing as needed
 			// need to check charcter index for the latitude, think they are fine but need to check
 			if string(file[i][14]) == "N" {
 				degrees1, _ := strconv.ParseFloat(file[i][7:9], 64)
 				degrees2, _ := strconv.ParseFloat(file[i][9:11]+"."+file[i][11:14], 64)
-				record.latitude[i] = degrees1 + degrees2/60
+				record.latitude = append(record.latitude, (degrees1 + degrees2/60))
 			} else {
 				degrees1, _ := strconv.ParseFloat(file[i][7:9], 64)
 				degrees2, _ := strconv.ParseFloat(file[i][9:11]+"."+file[i][11:14], 64)
-				record.latitude[i] = -(degrees1 + degrees2/60)
+				record.latitude = append(record.latitude, -(degrees1 + degrees2/60))
 			}
 
 			// checking if longitude is east or west, and parsing as needed
+			// indexing string is incorrect here, not quite sure where yet.
 			if string(file[i][23]) == "E" {
 				degrees1, _ := strconv.ParseFloat(file[i][15:18], 64)
 				degrees2, _ := strconv.ParseFloat(file[i][18:20]+"."+file[i][20:23], 64)
-				record.longitude[i] = degrees1 + degrees2/60
+				record.longitude = append(record.longitude, (degrees1 + degrees2/60))
 			} else {
 				degrees1, _ := strconv.ParseFloat(file[i][15:18], 64)
 				degrees2, _ := strconv.ParseFloat(file[i][18:20]+"."+file[i][20:23], 64)
-				record.longitude[i] = -(degrees1 + degrees2/60)
+				record.longitude = append(record.longitude, -(degrees1 + degrees2/60))
 			}
 
-			record.fixValidity[i] = file[i][24:25]
+			record.fixValidity = append(record.fixValidity, file[i][24:25])
 			pressureAltitude, _ := strconv.ParseFloat(file[i][25:30], 64)
-			record.pressureAltitude[i] = pressureAltitude
+			record.pressureAltitude = append(record.pressureAltitude, pressureAltitude)
 			gnnsAltitude, _ := strconv.ParseFloat(file[i][30:35], 64)
-			record.gnssAltitude[i] = gnnsAltitude
+			record.gnssAltitude = append(record.gnssAltitude, gnnsAltitude)
 		}
 	}
 

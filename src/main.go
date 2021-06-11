@@ -10,4 +10,5 @@ func main() {
 	brec := parseB(file)
 
 	fmt.Println(totalFlightDistance(brec.latitude, brec.longitude))
+
 }

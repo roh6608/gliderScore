@@ -90,9 +90,9 @@ func pointInWindingNumber(P point, V vertices, n int) bool {
 }
 
 // A function to find if a point lies within a circle on the WGS-84 ellipsoid
-func pointInCircle(lat float64, lon float64, centre [][]float64, radius float64) bool {
+func pointInCircle(lat float64, lon float64, centreLat float64, centreLon float64, radius float64) bool {
 
-	distance := vincentyDistance(lat, lon, centre[0][0], centre[0][1])
+	distance := vincentyDistance(lat, lon, centreLat, centreLon)
 
 	if distance <= radius {
 		return true
@@ -257,6 +257,18 @@ type task struct {
 	radius []float64
 }
 
+func markingDistance(task task, flight bRecord) (markingDistance float64) {
+	var points []bool
+	for j := 0; j < len(task.lat); j++ {
+		for i := 0; i < len(flight.latitude); j++ {
+			pointInCircle(flight.latitude[i], flight.longitude[i], task.lat[j], task.lon[j], task.radius[j])
+		}
+	}
+
+	return markingDistance
+
+}
+
 type result struct {
 	maxDailyPoints  float64
 	points          []float64
@@ -265,5 +277,12 @@ type result struct {
 	markingDistance []float64
 	speed           []float64
 	time            []float64
-	totalDistance   []float64
+}
+
+func flightNumber(directory string) int {
+	d, e := os.ReadDir(".")
+	if e != nil {
+		panic(e)
+	}
+	return len(d)
 }

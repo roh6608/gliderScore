@@ -89,7 +89,7 @@ func pointInWindingNumber(P point, V vertices, n int) bool {
 
 }
 
-// A function to find if a point lies within a circle on the WGS-84 spheroid
+// A function to find if a point lies within a circle on the WGS-84 ellipsoid
 func pointInCircle(lat float64, lon float64, centre [][]float64, radius float64) bool {
 
 	distance := vincentyDistance(lat, lon, centre[0][0], centre[0][1])
@@ -176,22 +176,13 @@ func readFile(filepath string) []string {
 	return lines
 }
 
-type bRecordString struct {
-	time             []string
-	latitude         []string
-	longitude        []string
-	fixValidity      []string
-	pressureAltitude []string
-	gnssAltitude     []string
-}
-
 type bRecord struct {
 	time             []time.Time
 	latitude         []float64
 	longitude        []float64
 	fixValidity      []string
-	pressureAltitude []int
-	gnssAltitude     []int
+	pressureAltitude []float64
+	gnssAltitude     []float64
 }
 
 // make the b recod parser only use the one struct, should be possible
@@ -204,50 +195,42 @@ func parseB(file []string) bRecord {
 	// in which it is located, this can then be used in the B record parser, then use if statements to check what is in the
 	// I record parser
 	// in b record parser change the use of append to just simple assignment since it is about 2 ns/op quicker
-	var b bRecordString
-
-	for i := 0; i < len(file); i++ {
-		if string(file[i][0]) == "B" {
-			b.time = append(b.time, file[i][1:7])
-			b.latitude = append(b.latitude, file[i][7:15])
-			b.longitude = append(b.longitude, file[i][15:24])
-			b.fixValidity = append(b.fixValidity, file[i][24:25])
-			b.pressureAltitude = append(b.pressureAltitude, file[i][25:30])
-			b.gnssAltitude = append(b.gnssAltitude, file[i][30:35])
-		}
-	}
 
 	var record bRecord
-	for i := 0; i < len(b.time); i++ {
-		time, _ := time.Parse("150405", b.time[i])
-		record.time = append(record.time, time)
+	for i := 0; i < len(file); i++ {
+		if string(file[i][0]) == "B" {
+			time, _ := time.Parse("150405", file[i][1:7])
+			record.time[i] = time
 
-		if b.latitude[i][len(b.latitude)-1:] == "N" {
-			degrees1, _ := strconv.ParseFloat(b.latitude[i][0:2], 64)
-			degrees2, _ := strconv.ParseFloat(b.latitude[i][2:4]+"."+b.latitude[i][4:7], 64)
-			record.latitude = append(record.latitude, (degrees1 + degrees2/60))
-		} else {
-			degrees1, _ := strconv.ParseFloat(b.latitude[i][0:2], 64)
-			degrees2, _ := strconv.ParseFloat(b.latitude[i][2:4]+"."+b.latitude[i][4:7], 64)
-			record.latitude = append(record.latitude, -(degrees1 + degrees2/60))
+			// checking if latitude is north or south, and parsing as needed
+			// need to check charcter index for the latitude, think they are fine but need to check
+			if string(file[i][14]) == "N" {
+				degrees1, _ := strconv.ParseFloat(file[i][7:9], 64)
+				degrees2, _ := strconv.ParseFloat(file[i][9:11]+"."+file[i][11:14], 64)
+				record.latitude[i] = degrees1 + degrees2/60
+			} else {
+				degrees1, _ := strconv.ParseFloat(file[i][7:9], 64)
+				degrees2, _ := strconv.ParseFloat(file[i][9:11]+"."+file[i][11:14], 64)
+				record.latitude[i] = -(degrees1 + degrees2/60)
+			}
+
+			// checking if longitude is east or west, and parsing as needed
+			if string(file[i][23]) == "E" {
+				degrees1, _ := strconv.ParseFloat(file[i][15:18], 64)
+				degrees2, _ := strconv.ParseFloat(file[i][18:20]+"."+file[i][20:23], 64)
+				record.longitude[i] = degrees1 + degrees2/60
+			} else {
+				degrees1, _ := strconv.ParseFloat(file[i][15:18], 64)
+				degrees2, _ := strconv.ParseFloat(file[i][18:20]+"."+file[i][20:23], 64)
+				record.longitude[i] = -(degrees1 + degrees2/60)
+			}
+
+			record.fixValidity[i] = file[i][24:25]
+			pressureAltitude, _ := strconv.ParseFloat(file[i][25:30], 64)
+			record.pressureAltitude[i] = pressureAltitude
+			gnnsAltitude, _ := strconv.ParseFloat(file[i][30:35], 64)
+			record.gnssAltitude[i] = gnnsAltitude
 		}
-
-		if b.longitude[i][len(b.longitude)-1:] == "E" {
-			degrees1, _ := strconv.ParseFloat(b.longitude[i][0:3], 64)
-			degrees2, _ := strconv.ParseFloat(b.longitude[i][3:5]+"."+b.longitude[i][5:8], 64)
-			record.longitude = append(record.longitude, degrees1+degrees2/60)
-		} else {
-			degrees1, _ := strconv.ParseFloat(b.longitude[i][0:3], 64)
-			degrees2, _ := strconv.ParseFloat(b.longitude[i][3:5]+"."+b.longitude[i][5:8], 64)
-			record.longitude = append(record.longitude, -(degrees1 + degrees2/60))
-		}
-
-		record.fixValidity = append(record.fixValidity, b.fixValidity[i])
-		pressureAltitude, _ := strconv.Atoi(b.pressureAltitude[i])
-		record.pressureAltitude = append(record.pressureAltitude, pressureAltitude)
-		gnnsAltitude, _ := strconv.Atoi(b.gnssAltitude[i])
-		record.gnssAltitude = append(record.gnssAltitude, gnnsAltitude)
-
 	}
 
 	return record

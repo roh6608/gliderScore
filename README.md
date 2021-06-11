@@ -10,7 +10,7 @@ Currently the only supported rule set is the GFA national competition rule set.
 
 ### Installing
 
-
+### Example
 
 ## Authors
 - [Rohan](https://github.com/roh6608)

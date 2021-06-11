@@ -17,6 +17,8 @@ Currently the only supported rule set is the GFA national competition rule set.
 
 ## Contributing
 
+### Rule Sets
+
 ## Licence
 This repository is licenced under GNU Lesser General Public License v2.1, you can read more in the licence file which can be found [here](https://github.com/roh6608/gliderScore/blob/main/LICENSE).
 

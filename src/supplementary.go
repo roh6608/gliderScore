@@ -250,3 +250,20 @@ func parseB(file []string) bRecord {
 	return record
 
 }
+
+type task struct {
+	lat    []float64
+	lon    []float64
+	radius []float64
+}
+
+type result struct {
+	maxDailyPoints  float64
+	points          []float64
+	distancePoints  []float64
+	speedPoints     []float64
+	markingDistance []float64
+	speed           []float64
+	time            []float64
+	totalDistance   []float64
+}

@@ -1,6 +1,7 @@
 # gliderScore
- 
-This repository is currently under development and is not suitable for use at this stage.
+![GitHub](https://img.shields.io/github/license/roh6608/gliderScore) 
+![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/roh6608/gliderScore)  
+This repository is currently under development and is not suitable for use at this stage.  
 
 ## Getting Started
 

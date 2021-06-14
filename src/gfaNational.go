@@ -61,7 +61,7 @@ func correctedPoints(dayFactor float64, points float64) float64 {
 // need a way to parse the task object from a file, so that the task filepath is specified rather than task object
 func scoreGfaNational(directory string, task task) (results result) {
 
-	taskDistance := totalFlightDistance(task.lat, task.lon)
+	//taskDistance := totalFlightDistance(task.lat, task.lon)
 
 	// add error handling here later
 	var flightName []string

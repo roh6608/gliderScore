@@ -258,7 +258,9 @@ type task struct {
 }
 
 func markingDistance(task task, flight bRecord) (markingDistance float64) {
-	var points []bool
+	// crop data to the square that surrounds the turning point cicrle before checking if points lie within it, should speed
+	// up the function immensly, will require normal vincenty algorithm to complete
+	//var points []bool
 	for j := 0; j < len(task.lat); j++ {
 		for i := 0; i < len(flight.latitude); j++ {
 			pointInCircle(flight.latitude[i], flight.longitude[i], task.lat[j], task.lon[j], task.radius[j])

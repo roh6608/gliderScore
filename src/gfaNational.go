@@ -1,7 +1,5 @@
 package main
 
-import "io/ioutil"
-
 // Function to return the maximum daily points available, as per rule 44.2
 func maxDaily(d0 float64, dD float64, t0 float64, tT float64) float64 {
 
@@ -58,25 +56,3 @@ func correctedPoints(dayFactor float64, points float64) float64 {
 }
 
 // Function to score gfa national competition flights
-// need a way to parse the task object from a file, so that the task filepath is specified rather than task object
-func scoreGfaNational(directory string, task task) (results result) {
-
-	//taskDistance := totalFlightDistance(task.lat, task.lon)
-
-	// add error handling here later
-	var flightName []string
-
-	files, _ := ioutil.ReadDir("./")
-
-	for _, f := range files {
-		flightName = append(flightName, f.Name())
-	}
-
-	// the process below will need a lot of optimisation, this is going to be the first and nieve attempt to get working,
-	// this is where the speed and efficiency of the application can be made
-	for i := 0; i < len(flightName); i++ {
-
-	}
-
-	return results
-}
